@@ -17,10 +17,16 @@ public class AuctionScheduledTasks {
 	@Autowired
 	private IAuctionService auctionService;
 
-	// Executed every hour
+	// Executed 60 min
 	@Scheduled(fixedRate = 3600000)
 	public void testApi() {
 		AuctionResult result = this.apiBlizzardService.getAuctionHouseElune();
 		auctionService.saveAuctions(result.getAuctions());
+	}
+	
+	// Executed everyday at 3AM
+	@Scheduled(cron = "0 0 3 * * *")
+	public void purgeDatabase() {
+		auctionService.purgeDatabase();
 	}
 }

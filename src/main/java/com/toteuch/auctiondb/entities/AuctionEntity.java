@@ -9,6 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import com.toteuch.auctiondb.enums.AuctionTime;
 
@@ -20,6 +22,7 @@ public class AuctionEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_auction")
 	private Long id;
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column
 	private Date creationDate;
 	@Column
