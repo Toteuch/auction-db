@@ -1,6 +1,6 @@
 # auction-db
 
-Put application.properties file into "config" folder right besid compiled jar
+Put application.properties file into "config" folder right beside compiled jar
 
 application.properties :
 spring.datasource.url=                                             #JDBC URI (postgres)
