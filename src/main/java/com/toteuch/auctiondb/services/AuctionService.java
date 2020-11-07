@@ -23,8 +23,9 @@ public class AuctionService implements IAuctionService {
 	
 	@Override
 	public void saveAuctions(List<Auction> auctions) {
-		logger.debug("Saving " + auctions.size() + " auctions...");
+		logger.info("Saving " + auctions.size() + " auctions...");
 		Date creationDate = new Date();
+		int compteur = 1;
 		for(Auction auction : auctions) {
 			AuctionEntity ent = new AuctionEntity();
 			ent.setAuctionId(auction.getId());
@@ -35,9 +36,11 @@ public class AuctionService implements IAuctionService {
 			ent.setQuantity(auction.getQuantity());
 			ent.setTimeLeft(auction.getTime_left());
 			ent.setUnitPrice(auction.getUnit_price());
+			logger.debug("Saving " + compteur+"/"+auctions.size()+ " auctions...");
 			repo.save(ent);
+			compteur++;
 		}
-		logger.debug("End of saving " + auctions.size() + " auctions");
+		logger.info("End of saving " + auctions.size() + " auctions");
 	}
 
 	@Override
@@ -45,7 +48,7 @@ public class AuctionService implements IAuctionService {
 		// Calculate minDate to keep in database
 		Calendar minusOneMonth = Calendar.getInstance();
 		minusOneMonth.add(Calendar.MONTH, -1);
-		logger.debug("Purging database from auctions older than " + minusOneMonth.getTime().toString());
+		logger.info("Purging database from auctions older than " + minusOneMonth.getTime().toString());
 		repo.purgeDatabase(minusOneMonth.getTime());
 	}
 
