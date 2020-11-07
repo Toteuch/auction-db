@@ -15,3 +15,4 @@ auctiondb.blizzard.api.secret=                                     #Your Blizzar
 
 logging.level.root=INFO
 logging.level.com.toteuch.auctiondb.services=DEBUG
+auctiondb.jobs.enabled=true                                        #true if not present
