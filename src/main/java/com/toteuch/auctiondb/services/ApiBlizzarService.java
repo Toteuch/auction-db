@@ -70,7 +70,7 @@ public class ApiBlizzarService implements IApiBlizzardService{
 		HttpEntity<String> request = new HttpEntity<String>(headers);
 		
 		url+= ParameterStringBuilderUtils.getParamsString(params);
-		logger.debug("Calling " + url+ "...");
+		logger.info("Calling " + url+ "...");
 		
 		return restTemplate.exchange(url, httpMethod, request, String.class);
 		
