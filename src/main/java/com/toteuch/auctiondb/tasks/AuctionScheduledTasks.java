@@ -18,9 +18,9 @@ public class AuctionScheduledTasks {
 	@Autowired
 	private IAuctionService auctionService;
 
-	@Scheduled(cron = "0 0 * * * *")
+	// Executed every hour
+	@Scheduled(fixedRate = 3600000)
 	public void testApi() {
-		System.out.println(this.apiBlizzardService.getTokenPrice(Region.EU).getPrice());
 		AuctionResult result = this.apiBlizzardService.getAuctionHouseElune();
 		auctionService.saveAuctions(result.getAuctions());
 	}

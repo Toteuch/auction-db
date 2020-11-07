@@ -4,6 +4,8 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -28,9 +30,10 @@ public class ApiBlizzarService implements IApiBlizzardService{
 	@Value("${auctiondb.blizzard.api.secret}")
 	private String clientSecret;
 	
-	private final static String DATA_WOW = "data/wow/"; 
-	
+	private final static String DATA_WOW = "data/wow/";
 	private final static int EU_ELUNE_ID = 1315;
+	
+	Logger logger = LoggerFactory.getLogger(ApiBlizzarService.class);
 	
 	private AccessToken getAccessToken() {
 		ResponseEntity<String> responseAccess = null;
@@ -41,17 +44,17 @@ public class ApiBlizzarService implements IApiBlizzardService{
 
 		HttpHeaders headersAccess = new HttpHeaders();
 		headersAccess.add("Authorization", "Basic " + encodedCredentials);
-
+		
 		HttpEntity<String> requestAccess = new HttpEntity<String>(headersAccess);
-
+		
 		String access_token_url = "https://eu.battle.net/oauth/token";
 		access_token_url += "?grant_type=" + "client_credentials";
-		System.out.println("Request Access Token...");
+		logger.debug("Request Access Token...");
 		responseAccess = restTemplateAccess.exchange(access_token_url, HttpMethod.POST, requestAccess, String.class);
-		System.out.println("Access Token Response ---------" + responseAccess.getBody());
 		
 		Gson gson = new Gson();
 		AccessToken accessToken = gson.fromJson(responseAccess.getBody(), AccessToken.class);
+		logger.debug("Access Token : " + accessToken.getAccess_token());
 		return accessToken;
 	}
 	
@@ -67,7 +70,7 @@ public class ApiBlizzarService implements IApiBlizzardService{
 		HttpEntity<String> request = new HttpEntity<String>(headers);
 		
 		url+= ParameterStringBuilderUtils.getParamsString(params);
-		System.out.println("url:"+url);
+		logger.debug("Calling " + url+ "...");
 		
 		return restTemplate.exchange(url, httpMethod, request, String.class);
 		
@@ -92,7 +95,6 @@ public class ApiBlizzarService implements IApiBlizzardService{
 		String url = Region.EU.getHost()+DATA_WOW+"connected-realm/"+EU_ELUNE_ID+"/auctions";
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("namespace", Namespace.DYNAMIC.getNamespace()+Region.EU.getIdentifier());
-		params.put("locale", "frFR");
 		ResponseEntity<String> response = callRestWebService(HttpMethod.GET, url, params);
 		Gson gson = new Gson();
 		AuctionResult auctionResult = gson.fromJson(response.getBody(), AuctionResult.class);

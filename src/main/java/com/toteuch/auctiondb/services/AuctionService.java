@@ -3,6 +3,8 @@ package com.toteuch.auctiondb.services;
 import java.util.Date;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,9 +18,11 @@ public class AuctionService implements IAuctionService {
 	@Autowired
 	private AuctionRepository repo;
 	
+	Logger logger = LoggerFactory.getLogger(AuctionService.class);
+	
 	@Override
 	public void saveAuctions(List<Auction> auctions) {
-		System.out.println("["+new Date()+"]Saving " + auctions.size() + " auctions...");
+		logger.debug("Saving " + auctions.size() + " auctions...");
 		Date creationDate = new Date();
 		for(Auction auction : auctions) {
 			AuctionEntity ent = new AuctionEntity();
@@ -32,7 +36,7 @@ public class AuctionService implements IAuctionService {
 			ent.setUnitPrice(auction.getUnit_price());
 			repo.save(ent);
 		}
-		System.out.println("["+new Date()+"]End of saving " + auctions.size() + " auctions");
+		logger.debug("End of saving " + auctions.size() + " auctions");
 	}
 
 }
