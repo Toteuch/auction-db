@@ -14,7 +14,7 @@ import com.toteuch.auctiondb.models.AuctionItemModel;
 import com.toteuch.auctiondb.services.IAuctionService;
 
 @Controller
-public class SimpleController {
+public class SimpleController extends AbstractAuctionDBController {
 	@Value("${spring.application.name}")
     String appName;
 	
@@ -40,10 +40,5 @@ public class SimpleController {
 		List<AuctionEntity> auctions = auctionService.getAuctionsForItemId(auctionItemModel.getItemId());
 		model.addAttribute("auctions", auctions);
 		return "auctionsItem";
-	}
-	
-	@ModelAttribute
-	public void addAttributes(Model model) {
-		model.addAttribute("username","Toteuch");
 	}
 }
