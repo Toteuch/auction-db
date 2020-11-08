@@ -7,6 +7,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.toteuch.auctiondb.entities.AuctionEntity;
@@ -50,6 +52,20 @@ public class AuctionService implements IAuctionService {
 		minusOneMonth.add(Calendar.MONTH, -1);
 		logger.info("Purging database from auctions older than " + minusOneMonth.getTime().toString());
 		repo.purgeDatabase(minusOneMonth.getTime());
+	}
+
+	@Override
+	public List<AuctionEntity> getTopTen() {
+		logger.debug("Get top ten auctions...");
+		Pageable page = PageRequest.of(0, 10);
+		return repo.findAllByUnitPriceIsNotNullOrderByUnitPriceDesc(page);
+	}
+
+	@Override
+	public List<AuctionEntity> getAuctionsForItemId(Long itemId) {
+		logger.debug("Get Auctions for itemId : " + itemId);
+		Pageable page = PageRequest.of(0, 200);
+		return repo.findByItemIdOrderByCreationDateDescUnitPriceAsc(itemId, page);
 	}
 
 }
